@@ -37,10 +37,6 @@ const Login = () => {
     }
   };
 
-  // useEffect(() => {
-  //   user && navigate("/"); // Redirect if user is already logged in
-  // }, [user, navigate]);
-
   return (
     <div className='w-full min-h-screen flex items-center justify-center flex-col lg:flex-row bg-[#f3f4f6]'>
       <div className='w-full md:w-auto flex gap-0 md:gap-40 flex-col md:flex-row items-center justify-center'>
@@ -109,6 +105,15 @@ const Login = () => {
                 label='Submit'
                 className='w-full h-10 bg-blue-700 text-white rounded-full'
               />
+
+              <div className='text-center mt-4'>
+                <span className='text-sm text-gray-500'>
+                  Don't have an account?{" "}
+                  <a href='/sign-up' className='text-blue-600 hover:underline'>
+                    Sign up
+                  </a>
+                </span>
+              </div>
             </div>
           </form>
         </div>

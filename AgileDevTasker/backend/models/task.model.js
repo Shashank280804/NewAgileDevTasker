@@ -25,7 +25,7 @@ const taskSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "TeamMember",
   }],
-  assignedBy: {  // Tracks who assigned the task, referencing User model
+  assignedTo: {  // Tracks who assigned the task, referencing User model
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true

@@ -1,26 +1,32 @@
 const TeamMember = require("../models/teamMember.model");
 
-// Create a new team member
 const createTeamMember = async (req, res) => {
   try {
+    // Log the request body to verify the data sent from the frontend
+    console.log("Request Body:", req.body);
+
     const { username, title, email, role } = req.body;
 
     // Check if all required fields are provided
     if (!username || !title || !email || !role) {
+      console.log("Missing required fields");
       return res.status(400).json({ message: "Username, title, email, and role are required" });
     }
 
     const newTeamMember = new TeamMember({ username, title, email, role });
     await newTeamMember.save();
+    console.log("Team member created:", newTeamMember);
     res.status(201).json({ message: "Team member created successfully", teamMember: newTeamMember });
   } catch (error) {
     console.error("Error creating team member:", error);
     if (error.name === 'ValidationError') {
+      console.error("Validation error:", error.errors);
       return res.status(400).json({ message: "Validation error", error: error.errors });
     }
     res.status(500).json({ message: "Error creating team member", error: error.message });
   }
 };
+
 
 // Get all team members
 const getAllTeamMembers = async (req, res) => {

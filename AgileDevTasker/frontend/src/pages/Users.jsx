@@ -30,10 +30,24 @@ const Users = () => {
         console.error("Error fetching users:", error);
       });
   }, []);
-
+  
   const handleAddUser = (newUser) => {
+    // Debugging: Log the data being sent to the backend
+    console.log("Form Data before sending to backend:", newUser); // Log the form data before sending
+  
+    // Ensure the required fields are correctly passed
+    const requestBody = {
+      username: newUser.username,  // Ensure `username` exists
+      title: newUser.title,
+      email: newUser.email,
+      role: newUser.role,
+    };
+  
+    // Debugging: Log the request body
+    console.log("Request Body being sent to backend:", requestBody);
+  
     // Add a new user via the backend API (POST request)
-    axios.post("http://localhost:5000/team-members", newUser)
+    axios.post("http://localhost:5000/team-members", requestBody)
       .then((response) => {
         setUsers((prevUsers) => [...prevUsers, response.data]);
         setOpen(false);  // Close the modal after adding user
@@ -42,6 +56,8 @@ const Users = () => {
         console.error("Error adding user:", error);
       });
   };
+  
+  
 
   const handleEditUser = (updatedUser) => {
     // Update the selected user via the backend API (PUT request)
@@ -98,10 +114,10 @@ const Users = () => {
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-full text-white flex items-center justify-center text-sm bg-blue-700">
             <span className="text-xs md:text-sm text-center">
-              {getInitials(user.username)}  // Use username instead of name
+              {getInitials(user.username)}  
             </span>
           </div>
-          {user.username}  // Use username instead of name
+          {user.username}  
         </div>
       </td>
       <td className="p-2">{user.title}</td>

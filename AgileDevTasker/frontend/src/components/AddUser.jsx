@@ -23,6 +23,7 @@ const AddUser = ({ open, setOpen, userData, onAddUser }) => {
   } = useForm({ defaultValues });
 
   const handleOnSubmit = async (data) => {
+    console.log("Form submitted with data:", data);
     try {
       if (userData) {
         // Check if the current user matches the user being updated
@@ -31,18 +32,32 @@ const AddUser = ({ open, setOpen, userData, onAddUser }) => {
           return; // Early return if user does not exist
         }
   
-        const response = await fetch(`http://localhost:5000/users/${userData._id}`, {
+        const requestBody = {
+          username: data.username,  // Ensure correct field names
+          title: data.title,
+          email: data.email,
+          role: data.role,
+        };
+  
+        console.log("Request body:", requestBody); // Add this line for debugging
+  
+        const response = await fetch(`http://localhost:5000/team-members/${userData._id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
+          body: JSON.stringify(requestBody),
         });
   
         if (!response.ok) throw new Error("Failed to update user");
-        toast.success(`User updated successfully!`);
+        toast.success("User updated successfully!");
       } else {
         // Add new user
-        onAddUser(data); // Call the function to add a user
-        toast.success(`User added successfully!`);
+        onAddUser({
+          username: data.username,  // Ensure correct field names
+          title: data.title,
+          email: data.email,
+          role: data.role,
+        });
+        toast.success("User added successfully!");
       }
       setOpen(false); // Close modal after submission
     } catch (error) {
@@ -61,11 +76,11 @@ const AddUser = ({ open, setOpen, userData, onAddUser }) => {
           <Textbox
             placeholder='Full name'
             type='text'
-            name='name'
+            name='username'
             label='Full Name'
             className='w-full rounded'
-            register={register("name", { required: "Full name is required!" })}
-            error={errors.name ? errors.name.message : ""}
+            register={register("username", { required: "Full name is required!" })}
+            error={errors.username ? errors.username.message : ""}
           />
           <Textbox
             placeholder='Title'

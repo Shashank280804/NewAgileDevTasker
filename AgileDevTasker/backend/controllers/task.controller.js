@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 const createTask = async (req, res) => {
   try {
-    const { title, stage, date, priority } = req.body;
+    const { title, stage, date, priority,assignedTo } = req.body;
 
     if (!title || !stage || !date || !priority) {
       return res
@@ -12,7 +12,7 @@ const createTask = async (req, res) => {
         .json({ error: "Title, stage, date, and priority are required" });
     }
 
-    const task = new Task({ title, stage, date, priority });
+    const task = new Task({ title, stage, date, priority,assignedTo });
     await task.save();
 
     console.log("Task added"); // Log message for successful task addition
@@ -129,7 +129,7 @@ const getTodoTasksCount = async (req, res) => {
 
 const assignMultipleMembers = async (req, res) => {
   const { id } = req.params;
-  const { memberIds, assignedById } = req.body; // Get member IDs and assignedBy user ID
+  const { memberIds, assignedToId } = req.body; // Get member IDs and assignedTo user ID
 
   try {
     const task = await Task.findById(id);
@@ -138,7 +138,7 @@ const assignMultipleMembers = async (req, res) => {
     }
 
     task.assignedMembers = memberIds; // Assign multiple team members
-    task.assignedBy = assignedById; // Track who assigned the members
+    task.assignedTo = assignedToId; // Track who assigned the members
     await task.save();
 
     res.json({ message: 'Members assigned successfully', task });

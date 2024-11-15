@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // Import Link for navigation
 import Textbox from "../components/Textbox";
 import Button from "../components/Button";
 import { useSelector } from "react-redux";
@@ -60,7 +60,7 @@ const Signin = () => {
             </div>
 
             <div className='flex flex-col gap-y-5'>
-            <Textbox
+              <Textbox
                 placeholder='Enter Name'
                 type='name'
                 name='name'
@@ -91,7 +91,7 @@ const Signin = () => {
                 register={register("Designation", {
                   required: "Designation is required!",
                 })}
-                error={errors.email ? errors.email.message : ""}
+                error={errors.Designation ? errors.Designation.message : ""}
               />
               <Textbox
                 placeholder='your password'
@@ -104,11 +104,18 @@ const Signin = () => {
                 })}
                 error={errors.password ? errors.password.message : ""}
               />
-              
 
-              <span className='text-sm text-gray-500 hover:text-blue-600 hover:underline cursor-pointer'>
-                Forget Password?
-              </span>
+              <div className='flex justify-between items-center'>
+                <span className='text-sm text-gray-500 hover:text-blue-600 hover:underline cursor-pointer'>
+                  Forget Password?
+                </span>
+                <Link
+                  to='/sign-up' // Link to the Sign-Up page
+                  className='text-sm text-gray-500 hover:text-blue-600 hover:underline cursor-pointer'
+                >
+                  Don't have an account?
+                </Link>
+              </div>
 
               <Button
                 type='submit'
