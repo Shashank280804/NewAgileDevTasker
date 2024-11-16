@@ -11,7 +11,9 @@ const SelectList = ({ lists, selected, setSelected, label }) => {
       <Listbox value={selected} onChange={setSelected}>
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full cursor-default rounded bg-white pl-3 pr-10 text-left px-3 py-2.5 border border-gray-300 sm:text-sm text-gray-900">
-            <span className="block truncate">{selected?.name || selected}</span>
+            <span className="block truncate">
+              {selected?.name || selected?.username || selected}
+            </span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
               <BsChevronExpand className="h-5 w-5 text-gray-400" aria-hidden="true" />
             </span>
@@ -40,7 +42,7 @@ const SelectList = ({ lists, selected, setSelected, label }) => {
                           selected ? "font-medium" : "font-normal"
                         }`}
                       >
-                        {item.name || item}
+                        {item?.name || item?.username || item}
                       </span>
                       {selected ? (
                         <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">

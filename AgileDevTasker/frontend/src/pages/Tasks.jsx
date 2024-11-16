@@ -47,9 +47,7 @@ const Tasks = () => {
     fetchTasks();
   }, []); // Initial fetch on mount
 
-  useEffect(() => {
-    fetchTasks(); // Fetch tasks whenever the tasks state changes
-  }, [tasks]);
+
 
   // Filter tasks based on their stage
   const filteredTasks = status ? tasks.filter(task => task.stage === status) : tasks;

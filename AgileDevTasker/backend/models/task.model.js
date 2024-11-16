@@ -27,7 +27,7 @@ const taskSchema = new mongoose.Schema({
   }],
   assignedTo: {  // Tracks who assigned the task, referencing User model
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "TeamMember",
     required: true
   },
 }, { timestamps: true });

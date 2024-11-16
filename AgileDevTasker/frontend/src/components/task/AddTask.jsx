@@ -27,6 +27,8 @@ const AddTask = ({ open, setOpen }) => {
     const fetchTeamMembers = async () => {
       try {
         const response = await axios.get("http://localhost:5000/team-members"); // Adjust this URL as needed
+        console.log("API Response (team members):", response.data);
+
         setTeamMembers(response.data); // Assuming the API returns an array of team members
       } catch (error) {
         console.error("Error fetching team members:", error);
@@ -43,7 +45,7 @@ const AddTask = ({ open, setOpen }) => {
         stage: stage.toLowerCase(), // Convert to lowercase to match enum values
         date: data.date,
         priority: priority.toLowerCase(), // Convert to lowercase to match enum values
-        assignedMember, // Add assigned member to the form data
+        assignedTo:assignedMember, // Add assigned member to the form data
       };
 
       // Make a POST request to the backend
@@ -120,12 +122,13 @@ const AddTask = ({ open, setOpen }) => {
             <div className="w-full">
               <SelectList
                 label="Assign Task"
-                lists={teamMembers.map((member) => member.name)} // Assuming team members have a `name` field
-                selected={assignedMember}
-                setSelected={setAssignedMember}
-                className="w-full" // Ensure the width matches the other fields
+                lists={teamMembers.map((member) => member.username || "Unknown")} // Display team member names in dropdown
+                selected={assignedMember} // Selected team member
+                setSelected={setAssignedMember} // Function to set the selected team member
+                className="w-full"
               />
             </div>
+
           </div>
 
           {/* Add Assets Section */}
