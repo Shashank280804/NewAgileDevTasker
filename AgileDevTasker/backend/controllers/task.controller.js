@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 const createTask = async (req, res) => {
   try {
-    const { title, stage, date, priority,assignedTo } = req.body;
+    const { title, stage, date, priority, assignedTo } = req.body;
 
     if (!title || !stage || !date || !priority) {
       return res
@@ -12,7 +12,11 @@ const createTask = async (req, res) => {
         .json({ error: "Title, stage, date, and priority are required" });
     }
 
-    const task = new Task({ title, stage, date, priority,assignedTo });
+    // Validate assignedTo
+    if (assignedTo && !mongoose.Types.ObjectId.isValid(assignedTo)) {
+      return res.status(400).json({ error: "Invalid assignedTo ID" });
+    }
+    const task = new Task({ title, stage, date, priority, assignedTo });
     await task.save();
 
     console.log("Task added"); // Log message for successful task addition
