@@ -117,7 +117,7 @@ const Tasks = () => {
         )}
       </Tabs>
 
-      <AddTask open={isAddTaskOpen} setOpen={setIsAddTaskOpen} onAddTask={handleAddTask} />
+      <AddTask open={isAddTaskOpen} setOpen={setIsAddTaskOpen} onAddTask={handleAddTask} refreshTasks={fetchTasks}/>
     </div>
   );
 };

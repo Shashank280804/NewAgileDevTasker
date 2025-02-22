@@ -3,12 +3,18 @@ import React, { Fragment } from "react";
 import { BsChevronExpand } from "react-icons/bs";
 import { MdCheck } from "react-icons/md";
 
-const SelectList = ({ lists, selected, setSelected, label }) => {
+const SelectList = ({ lists, selected, setSelected, label, setValue }) => {
   return (
     <div className="w-full">
       {label && <p className="text-slate-900 dark:text-gray-500">{label}</p>}
 
-      <Listbox value={selected} onChange={setSelected}>
+      <Listbox
+        value={selected}
+        onChange={(value) => {
+          setSelected(value);
+          setValue("assignedTo", value._id); // Ensure the form tracks assignedTo
+        }}
+      >
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full cursor-default rounded bg-white pl-3 pr-10 text-left px-3 py-2.5 border border-gray-300 sm:text-sm text-gray-900">
             <span className="block truncate">
