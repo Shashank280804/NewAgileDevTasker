@@ -8,13 +8,15 @@ import { BiImages } from "react-icons/bi";
 import Button from "../Button";
 import axios from "axios";
 
+
 const LISTS = ["todo", "in progress", "completed"]; // Changed to lowercase
 const PRIORIRY = ["high", "medium", "normal"]; // Changed to lowercase
 
-const AddTask = ({ open, setOpen }) => {
+const AddTask = ({ open, setOpen, refreshTasks }) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
   const [stage, setStage] = useState(LISTS[0]);
@@ -38,21 +40,44 @@ const AddTask = ({ open, setOpen }) => {
     fetchTeamMembers();
   }, []);
 
+  useEffect(() => {
+    setValue("stage", stage); // Sync stage with react-hook-form
+  }, [stage, setValue]);
+
+  useEffect(() => {
+    setValue("priority", priority); // Sync priority with react-hook-form
+  }, [priority, setValue]);
+
+  useEffect(() => {
+    setValue("assignedTo", assignedMember); // Sync assignedMember with react-hook-form
+  }, [assignedMember, setValue]);
+
+
   const submitHandler = async (data) => {
+
+    console.log("Raw Data:", data); // Log original data
+    console.log("Assigned Member ID:", data.assignedTo?._id);
+
     try {
+
+      if (!data.title || !data.date || !data.assignedTo?._id) { // Ensure _id exists
+        console.error("Missing required fields:", data);
+        return;
+      }
       const formData = {
         title: data.title,
-        stage: stage.toLowerCase(), // Convert to lowercase to match enum values
+        stage: data.stage?.toLowerCase() || "todo", // Default to 'todo' if not provided
         date: data.date,
-        priority: priority.toLowerCase(), // Convert to lowercase to match enum values
-        assignedTo:assignedMember, // Add assigned member to the form data
+        priority: data.priority?.toLowerCase() || "normal", // Default to 'normal' if not provided
+        assignedTo: data.assignedTo?._id, // Extract _id from assignedTo object
       };
 
       // Make a POST request to the backend
       const response = await axios.post("http://localhost:5000/tasks", formData);
 
       console.log(response.data); // Log the response from the server
-      setOpen(false); // Close the modal after successful submission
+      setOpen(false);
+      refreshTasks(); // Close the modal after successful submission
       // You might want to update the state or refresh tasks after adding a new one
     } catch (error) {
       console.error("Error creating task:", error);
@@ -92,7 +117,10 @@ const AddTask = ({ open, setOpen }) => {
               label="Task Stage"
               lists={LISTS}
               selected={stage}
-              setSelected={setStage}
+              setSelected={(value) => {
+                setStage(value);
+                setValue("stage", value); // Ensure form state updates
+              }}
               className="w-full"
             />
             <div className="w-full">
@@ -116,17 +144,24 @@ const AddTask = ({ open, setOpen }) => {
               label="Priority Level"
               lists={PRIORIRY}
               selected={priority}
-              setSelected={setPriority}
+              setSelected={(value) => {
+                setPriority(value);
+                setValue("priority", value); // Ensure form state updates
+              }}
               className="w-full"
             />
             <div className="w-full">
               <SelectList
                 label="Assign Task"
-                lists={teamMembers.map((member) => member.username || "Unknown")} // Display team member names in dropdown
-                selected={assignedMember} // Selected team member
-                setSelected={setAssignedMember} // Function to set the selected team member
+                lists={teamMembers}
+                selected={assignedMember}
+                setSelected={(value) => {
+                  setAssignedMember(value);
+                  setValue("assignedTo", value); // Ensure form state updates
+                }} // Pass setValue from react-hook-form
                 className="w-full"
               />
+
             </div>
 
           </div>
