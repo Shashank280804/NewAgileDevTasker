@@ -25,18 +25,18 @@ export function dateFormatter(dateString) {
 }
 
 export function getInitials(fullName) {
-  
-  
-  console.log("fullname: ",fullName);
-  
+  // Handle cases where fullName is undefined, null, or an empty string
+  if (!fullName || typeof fullName !== "string") {
+    return ""; // Return an empty string or a default value
+  }
+
+
   const names = fullName.split(" ");
-  
-  console.log("names: ",names);
-  const initials = names.slice(0, 2).map((name) => name[0].toUpperCase());
-  
-  console.log("initials: ",initials);
+
+  // Extract initials from the first two names (if they exist)
+  const initials = names.slice(0, 2).map((name) => (name ? name[0].toUpperCase() : ""));
+
   const initialsStr = initials.join("");
-  console.log("initialsStr: ",initialsStr);
 
   return initialsStr;
 }

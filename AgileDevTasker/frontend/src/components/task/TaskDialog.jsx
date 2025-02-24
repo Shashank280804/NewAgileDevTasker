@@ -9,7 +9,7 @@ import { Menu, Transition } from "@headlessui/react";
 import AddTask from "./AddTask";
 import AddSubTask from "./AddSubTask";
 import ConfirmatioDialog from "../Dialogs";
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 
 const TaskDialog = ({ task, setTasks }) => {  // ✅ Accept setTasks as a prop
   const [open, setOpen] = useState(false);
@@ -38,7 +38,7 @@ const TaskDialog = ({ task, setTasks }) => {  // ✅ Accept setTasks as a prop
       // ✅ Ensure UI updates immediately
       setTasks((prevTasks) => prevTasks.filter((t) => t._id !== task._id));
 
-      navigate('/tasks'); // Optional: Redirect after deletion
+      // Optional: Redirect after deletion
     } catch (error) {
       console.error('Error deleting task:', error);
       toast.error('Failed to delete task: ' + error.message);

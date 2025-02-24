@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import ModalWrapper from "./ModalWrapper";
@@ -6,11 +6,12 @@ import { Dialog } from "@headlessui/react";
 import Textbox from "./Textbox";
 import Loading from "./Loader";
 import Button from "./Button";
-import { toast } from 'react-toastify'; // Ensure toast is imported
+import { toast } from 'sonner';
 
 
 const AddUser = ({ open, setOpen, userData, onAddUser }) => {
-  const defaultValues = userData ?? {};
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const defaultValues = typeof userData === 'object' && userData !== null ? userData : {};
   const { user } = useSelector((state) => state.auth);
 
   const isLoading = false; // Update this based on actual loading state
@@ -19,62 +20,96 @@ const AddUser = ({ open, setOpen, userData, onAddUser }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({ defaultValues });
 
+  useEffect(() => {
+    if (typeof userData === "string") {
+      console.error("Invalid userData format:", userData);
+    }
+  }, [userData]);
+
+
+  useEffect(() => {
+    console.log("userData:", userData, "Type:", typeof userData);
+    reset(userData && typeof userData === "object" ? userData : {});
+  }, [userData, reset]);
+
+
   const handleOnSubmit = async (data) => {
-    console.log("Form submitted with data:", data);
+    if (isSubmitting) {
+      console.warn("Form is already submitting, preventing duplicate submission");
+      return;
+    }
+
+    console.log("handleOnSubmit triggered with data:", data);
+    setIsSubmitting(true);
+
     try {
-      if (userData) {
-        // Check if the current user matches the user being updated
-      
-        console.log("checking user id",user._id);
-        console.log("checking user data id",userData._id);
-        
-        
-        // if (user._id !== userData._id) {
-        //   console.log("hi");
-          
-        //   toast.error('User does not exist.');
-        //   return; // Early return if user does not exist
-        // }
-  
-        console.log("hi");
-        
+      if (userData && userData._id) {
+        console.log("Updating user with ID:", userData._id);
+
+
         const requestBody = {
           username: data.username,  // Ensure correct field names
           title: data.title,
           email: data.email,
           role: data.role,
         };
-  
-        console.log("Request body:", requestBody); // Add this line for debugging
-  
+
+        console.log("Sending PUT request with data:", requestBody);
+
         const response = await fetch(`http://localhost:5000/team-members/${userData._id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(requestBody),
         });
-  
+
         if (!response.ok) throw new Error("Failed to update user");
         toast.success("User updated successfully!");
       } else {
         // Add new user
-        onAddUser({
-          username: data.username,  // Ensure correct field names
-          title: data.title,
-          email: data.email,
-          role: data.role,
+        console.log("Creating new user:", data);
+
+        const response = await fetch("http://localhost:5000/team-members", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
         });
-        toast.success("User added successfully!");
+
+        const result = await response.json();
+        if (!response.ok) {
+          console.error("Error creating team member:", result.message);
+          toast.error("Error creating user!");
+        } else {
+          console.log("Team member created successfully:", result.teamMember);
+
+          // Make sure result.teamMember has a unique _id
+          if (result.teamMember && result.teamMember._id) {
+            onAddUser(result.teamMember); // Add new user to the state
+            toast.success("User added successfully!");
+          } else {
+            console.warn("Received user data is missing _id:", result.teamMember);
+          }
+        }
+
       }
+      console.log("Closing modal and resetting form");
+
+      reset();
       setOpen(false); // Close modal after submission
     } catch (error) {
       console.error("Error:", error);
       toast.error(`Error: ${error.message}`);
     }
+    finally {
+      console.log("Re-enabling submit button");
+
+      setIsSubmitting(false); // Re-enable the submit button
+    }
   };
-  
+
   return (
     <ModalWrapper open={open} setOpen={setOpen}>
       <form onSubmit={handleSubmit(handleOnSubmit)}>
@@ -128,7 +163,8 @@ const AddUser = ({ open, setOpen, userData, onAddUser }) => {
             <Button
               type='submit'
               className='bg-blue-600 px-8 text-sm font-semibold text-white hover:bg-blue-700 sm:w-auto'
-              label='Submit'
+              label={isSubmitting ? "Submitting..." : "Submit"} // Update button label
+              disabled={isSubmitting}
             />
             <Button
               type='button'

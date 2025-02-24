@@ -113,7 +113,7 @@ function App() {
         <Route path='/sign-up' element={<Signup />} />
       </Routes>
 
-      <Toaster richColors />
+      <Toaster position="top-right" richColors />
     </main>
   );
 }

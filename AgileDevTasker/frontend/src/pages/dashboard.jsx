@@ -166,9 +166,9 @@ const Dashboard = () => {
 
     const fetchCompletedTasksCount = async () => {
       try {
-        const response = await fetch("http://localhost:5000/tasks/completed/count");
+        const response = await fetch("http://localhost:5000/tasks/count/completed");
         const data = await response.json();
-        setCompletedTasksCount(data?.count); // Use optional chaining here
+        setCompletedTasksCount(data?.count); 
       } catch (error) {
         console.error("Error fetching completed tasks count:", error);
       }
@@ -176,9 +176,9 @@ const Dashboard = () => {
 
     const fetchInProgressTasksCount = async () => {
       try {
-        const response = await fetch("http://localhost:5000/tasks/inprogress/count");
+        const response = await fetch("http://localhost:5000/tasks/count/in-progress");
         const data = await response.json();
-        setInProgressTasksCount(data?.count); // Use optional chaining here
+        setInProgressTasksCount(data?.count); 
       } catch (error) {
         console.error("Error fetching in progress tasks count:", error);
       }
@@ -186,9 +186,9 @@ const Dashboard = () => {
 
     const fetchTodosCount = async () => {
       try {
-        const response = await fetch("http://localhost:5000/tasks/todos/count");
+        const response = await fetch("http://localhost:5000/tasks/count/todo");
         const data = await response.json();
-        setTodosCount(data?.count); // Use optional chaining here
+        setTodosCount(data?.count); 
       } catch (error) {
         console.error("Error fetching todos count:", error);
       }

@@ -19,9 +19,7 @@ const Users = () => {
     // Load users from backend on component mount
     axios.get("http://localhost:5000/team-members")
       .then((response) => {
-        // Debugging: Log the API response data
-        console.log("API Response:", response.data);
-
+        
         // Ensure that the response is an array before setting the state
         const usersData = Array.isArray(response.data) ? response.data : [];
         setUsers(usersData);
@@ -32,8 +30,6 @@ const Users = () => {
   }, []);
   
   const handleAddUser = (newUser) => {
-    // Debugging: Log the data being sent to the backend
-    console.log("Form Data before sending to backend:", newUser); // Log the form data before sending
   
     // Ensure the required fields are correctly passed
     const requestBody = {
@@ -43,8 +39,7 @@ const Users = () => {
       role: newUser.role,
     };
   
-    // Debugging: Log the request body
-    console.log("Request Body being sent to backend:", requestBody);
+    
   
     // Add a new user via the backend API (POST request)
     axios.post("http://localhost:5000/team-members", requestBody)
@@ -87,14 +82,20 @@ const Users = () => {
   };
 
   const deleteClick = (id) => {
-    setSelected(id);
+    setSelected(null); // Reset selected to avoid passing an incorrect value to AddUser
     setOpenDialog(true);
+    setSelected(id);
   };
 
   const editClick = (user) => {
-    setSelected(user);
-    setOpen(true);  // Open the modal with the selected user's data
+    if (user && typeof user === "object") {
+      setSelected(user); // Store full user object
+      setOpen(true);
+    } else {
+      console.error("Invalid user object passed to editClick:", user);
+    }
   };
+  
 
   const TableHeader = () => (
     <thead className="border-b border-gray-300">
@@ -170,7 +171,7 @@ const Users = () => {
               <tbody>
                 {Array.isArray(users) && users.length > 0 ? (
                   users.map((user) => (
-                    <TableRow key={user._id} user={user} />
+                    <TableRow key={user._id || user.email} user={user} />
                   ))
                 ) : (
                   <tr>
@@ -186,7 +187,7 @@ const Users = () => {
       <AddUser
         open={open}
         setOpen={setOpen}
-        userData={selected}
+        userData={selected || {}}
         onAddUser={handleAddUser}
         onEditUser={handleEditUser}  // Pass the edit function to the modal
       />

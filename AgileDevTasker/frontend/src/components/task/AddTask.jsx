@@ -7,6 +7,8 @@ import SelectList from "../SelectList";
 import { BiImages } from "react-icons/bi";
 import Button from "../Button";
 import axios from "axios";
+import { toast } from "sonner";
+
 
 
 const LISTS = ["todo", "in progress", "completed"]; // Changed to lowercase
@@ -29,7 +31,6 @@ const AddTask = ({ open, setOpen, refreshTasks }) => {
     const fetchTeamMembers = async () => {
       try {
         const response = await axios.get("http://localhost:5000/team-members"); // Adjust this URL as needed
-        console.log("API Response (team members):", response.data);
 
         setTeamMembers(response.data); // Assuming the API returns an array of team members
       } catch (error) {
@@ -55,8 +56,6 @@ const AddTask = ({ open, setOpen, refreshTasks }) => {
 
   const submitHandler = async (data) => {
 
-    console.log("Raw Data:", data); // Log original data
-    console.log("Assigned Member ID:", data.assignedTo?._id);
 
     try {
 
@@ -74,16 +73,15 @@ const AddTask = ({ open, setOpen, refreshTasks }) => {
 
       // Make a POST request to the backend
       const response = await axios.post("http://localhost:5000/tasks", formData);
+      toast.success("Task created successfully!"); 
 
-      console.log(response.data); // Log the response from the server
       setOpen(false);
 
       if (typeof refreshTasks === "function") {  // Ensure it's a function before calling
         refreshTasks();
       } else {
         console.error("refreshTasks is not a function", refreshTasks);
-      }// Close the modal after successful submission
-      // You might want to update the state or refresh tasks after adding a new one
+      }
     } catch (error) {
       console.error("Error creating task:", error);
       // Handle error if submission fails

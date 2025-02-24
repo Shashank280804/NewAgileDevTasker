@@ -16,7 +16,6 @@ const Signin = () => {
   const navigate = useNavigate();
 
   const submitHandler = async (data) => {
-    console.log("submit");
     navigate("/dashboard");
   };
 

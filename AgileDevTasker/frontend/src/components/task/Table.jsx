@@ -25,8 +25,10 @@ const Table = ({ tasks }) => {
   const [selected, setSelected] = useState(null);
 
   const deleteClicks = (id) => {
-    setSelected(id);
+    setSelected(null);
     setOpenDialog(true);
+    setSelected(id);
+   
   };
 
   const deleteHandler = () => {};

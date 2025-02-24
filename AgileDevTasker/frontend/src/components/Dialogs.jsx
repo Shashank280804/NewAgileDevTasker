@@ -12,7 +12,10 @@ export default function ConfirmatioDialog({
   type = "delete",
 }) {
   const closeDialog = () => {
+    reset(); // Clear form data
+
     setOpen(false);
+    
   };
 
   return (

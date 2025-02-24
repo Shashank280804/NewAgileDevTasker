@@ -28,7 +28,6 @@ const Signup = () => {
         formData
       );
 
-      console.log(response.data.message); // Log success message
       navigate("/log-in"); // Redirect to dashboard after successful signup
     } catch (error) {
       console.error("Error registering user:", error.message);
