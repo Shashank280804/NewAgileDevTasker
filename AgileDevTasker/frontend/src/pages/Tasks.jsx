@@ -70,12 +70,18 @@ const Tasks = () => {
   // Function to delete a task
   const handleDeleteTask = async (id) => {
     try {
-      await fetch(`http://localhost:5000/tasks/${id}`, { method: "DELETE" });
-      setTasks((prevTasks) => prevTasks.filter(task => task._id !== id));
+      const response = await fetch(`http://localhost:5000/tasks/${id}`, { method: "DELETE" });
+  
+      if (response.ok) {
+        fetchTasks(); 
+      } else {
+        console.error("Failed to delete task");
+      }
     } catch (error) {
       console.error("Error deleting task:", error);
     }
   };
+  
 
   if (loading) {
     return (
@@ -109,7 +115,7 @@ const Tasks = () => {
         )}
 
         {selectedTab !== 1 ? (
-          <BoardView tasks={filteredTasks} onDeleteTask={handleDeleteTask} />
+          <BoardView tasks={filteredTasks} setTasks={setTasks} onDeleteTask={handleDeleteTask} />
         ) : (
           <div className="w-full">
             <Table tasks={filteredTasks} onDeleteTask={handleDeleteTask} />

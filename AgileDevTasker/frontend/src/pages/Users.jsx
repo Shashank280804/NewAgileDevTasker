@@ -114,15 +114,15 @@ const Users = () => {
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-full text-white flex items-center justify-center text-sm bg-blue-700">
             <span className="text-xs md:text-sm text-center">
-              {getInitials(user.username)}  
+              {getInitials(user?.username)}  
             </span>
           </div>
-          {user.username}  
+          {user?.username}  
         </div>
       </td>
-      <td className="p-2">{user.title}</td>
-      <td className="p-2">{user.email || "user.email.com"}</td>
-      <td className="p-2">{user.role}</td>
+      <td className="p-2">{user?.title}</td>
+      <td className="p-2">{user?.email || "user.email.com"}</td>
+      <td className="p-2">{user?.role}</td>
       <td>
         <button
           className={clsx(

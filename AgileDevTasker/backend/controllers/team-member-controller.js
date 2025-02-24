@@ -84,9 +84,13 @@ const updateTeamMember = async (req, res) => {
     );
 
     if (!teamMember) {
+      console.log("hi inside if",teamMember);
+
+      
       console.log("Team member not found for update.");
       return res.status(404).json({ message: "Team member not found" });
     }
+    console.log("hi outside if",teamMember);
 
     console.log("Updated team member:", teamMember);
     res.json({ message: "Team member updated successfully", teamMember });

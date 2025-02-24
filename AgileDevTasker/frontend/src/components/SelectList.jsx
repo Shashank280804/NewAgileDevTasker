@@ -2,8 +2,14 @@ import { Listbox, Transition } from "@headlessui/react";
 import React, { Fragment } from "react";
 import { BsChevronExpand } from "react-icons/bs";
 import { MdCheck } from "react-icons/md";
+import { useForm } from "react-hook-form";
 
-const SelectList = ({ lists, selected, setSelected, label, setValue }) => {
+const SelectList = ({ lists, selected, setSelected, label }) => {
+   const {
+       setValue,
+       formState: { errors },
+     } = useForm();
+
   return (
     <div className="w-full">
       {label && <p className="text-slate-900 dark:text-gray-500">{label}</p>}

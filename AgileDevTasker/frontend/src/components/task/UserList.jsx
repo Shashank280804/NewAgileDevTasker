@@ -71,7 +71,7 @@ const UserList = ({ setTeam, team }) => {
                       >
                         <div className='w-6 h-6 rounded-full text-white flex items-center justify-center bg-violet-600'>
                           <span className='text-center text-[10px]'>
-                            {getInitials(user.name)}
+                            {getInitials(user?.name)}
                           </span>
                         </div>
                         <span>{user.name}</span>

@@ -11,12 +11,10 @@ import AddSubTask from "./AddSubTask";
 import ConfirmatioDialog from "../Dialogs";
 import { toast } from 'react-toastify';
 
-
-const TaskDialog = ({ task }) => {
+const TaskDialog = ({ task, setTasks }) => {  // ✅ Accept setTasks as a prop
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-
   const navigate = useNavigate();
 
   const duplicateHandler = () => {};
@@ -35,9 +33,12 @@ const TaskDialog = ({ task }) => {
         throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorMessage}`);
       }
 
-      // Handle success response
       toast.success('Task deleted successfully!');
-      navigate('/tasks'); // Navigate to the tasks list
+
+      // ✅ Ensure UI updates immediately
+      setTasks((prevTasks) => prevTasks.filter((t) => t._id !== task._id));
+
+      navigate('/tasks'); // Optional: Redirect after deletion
     } catch (error) {
       console.error('Error deleting task:', error);
       toast.error('Failed to delete task: ' + error.message);

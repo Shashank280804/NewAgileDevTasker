@@ -27,11 +27,20 @@ const AddUser = ({ open, setOpen, userData, onAddUser }) => {
     try {
       if (userData) {
         // Check if the current user matches the user being updated
-        if (user._id !== userData._id) {
-          toast.error('User does not exist.');
-          return; // Early return if user does not exist
-        }
+      
+        console.log("checking user id",user._id);
+        console.log("checking user data id",userData._id);
+        
+        
+        // if (user._id !== userData._id) {
+        //   console.log("hi");
+          
+        //   toast.error('User does not exist.');
+        //   return; // Early return if user does not exist
+        // }
   
+        console.log("hi");
+        
         const requestBody = {
           username: data.username,  // Ensure correct field names
           title: data.title,

@@ -25,11 +25,18 @@ export function dateFormatter(dateString) {
 }
 
 export function getInitials(fullName) {
+  
+  
+  console.log("fullname: ",fullName);
+  
   const names = fullName.split(" ");
-
+  
+  console.log("names: ",names);
   const initials = names.slice(0, 2).map((name) => name[0].toUpperCase());
-
+  
+  console.log("initials: ",initials);
   const initialsStr = initials.join("");
+  console.log("initialsStr: ",initialsStr);
 
   return initialsStr;
 }

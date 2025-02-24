@@ -77,7 +77,12 @@ const AddTask = ({ open, setOpen, refreshTasks }) => {
 
       console.log(response.data); // Log the response from the server
       setOpen(false);
-      refreshTasks(); // Close the modal after successful submission
+
+      if (typeof refreshTasks === "function") {  // Ensure it's a function before calling
+        refreshTasks();
+      } else {
+        console.error("refreshTasks is not a function", refreshTasks);
+      }// Close the modal after successful submission
       // You might want to update the state or refresh tasks after adding a new one
     } catch (error) {
       console.error("Error creating task:", error);
