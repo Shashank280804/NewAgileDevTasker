@@ -30,6 +30,7 @@ const Tasks = () => {
   const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState([]);
 
+
   // Fetch tasks when the component mounts and when tasks change
   const fetchTasks = async () => {
     try {

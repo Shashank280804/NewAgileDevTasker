@@ -131,6 +131,21 @@ const getTodoTasksCount = async (req, res) => {
   }
 };
 
+const getTasksAssignedToMember = async (req, res) => {
+  const memberId = req.params.memberId;
+  console.log("Fetching tasks for member with ID:", memberId);
+
+  try {
+    const tasks = await Task.find({ assignedMembers: memberId });  // Query tasks by memberId
+    res.status(200).json(tasks);  // Just return the tasks array
+  } catch (error) {
+    console.error("Error fetching assigned tasks:", error);
+    res.status(500).json({ message: "Error fetching tasks", error });
+  }
+};
+
+
+
 const assignMultipleMembers = async (req, res) => {
   const { id } = req.params;
   const { memberIds, assignedToId } = req.body; // Get member IDs and assignedTo user ID
@@ -167,4 +182,6 @@ module.exports = {
   getInProgressTasksCount,
   getTodoTasksCount,
   assignMultipleMembers,
+  getTasksAssignedToMember,
+
 };

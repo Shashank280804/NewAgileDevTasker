@@ -12,6 +12,8 @@ router.get("/tasks/count/todo", taskController.getTodoTasksCount);
 
 router.get("/tasks/:id", taskController.getTaskById);
 router.get("/tasks", taskController.getAllTasks);
+router.get("/tasks/assigned/:memberId", taskController.getTasksAssignedToMember);
+
 router.put("/tasks/:id", taskController.updateTask);
 router.delete("/tasks/:id", taskController.deleteTask);
 
